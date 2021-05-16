@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class UpdatePostsController extends Controller
 {
@@ -16,13 +17,16 @@ class UpdatePostsController extends Controller
      *
      */
     public function show($post_id) {
+        Log::debug("Entering UpdatePostsController.show with: " . $post_id);
+
+
         //if post is found and current user is owner of post
         if (!auth()->check()) {
             return redirect()->route('login')->with('message', 'You need to login to see this post first');
         } else if (Post::find($post_id) && auth()->user()->id == Post::find($post_id)->user_id) {
             return view('posts.update', [
                 'post' => Post::find($post_id)
-            ]);
+                ]);
         } else {
             abort(404, 'Post not found');
         }
@@ -35,6 +39,8 @@ class UpdatePostsController extends Controller
      *
      */
     public function update($post_id) {
+        Log::debug("Entering UpdatePostsController.update with: " . $post_id);
+
         request()->validate([
             'post_title' => ['required'],
             'post_body' => ['required']

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PostsController extends Controller
 {
@@ -16,6 +17,8 @@ class PostsController extends Controller
     *
     */
     public function index() {
+        Log::debug("Entering PostController.index");
+
         return view('posts.viewAll', [
             'posts' => Post::get(),
         ]);
@@ -30,6 +33,8 @@ class PostsController extends Controller
      *
      **/
     public function show($post_id) {
+        Log::debug("Entering PostController.show: " . $post_id);
+
         if (Post::find($post_id)) {
             return view('posts.showPost', [
                 'post' => Post::find($post_id)
@@ -48,7 +53,9 @@ class PostsController extends Controller
      *
      */
     public function delete($post_id) {
-        //if post is found and ownder of post is currently user
+        Log::debug("entering PostsController.delete: " . $post_id);
+
+        //if post is found and ownner of post is currently user
         if (!auth()->check()) {
             return redirect()->route('login')->with('message', 'You need to be logged in to delete a post');
         } else if (Post::find($post_id) && auth()->user()->id == Post::find($post_id)->user_id) {

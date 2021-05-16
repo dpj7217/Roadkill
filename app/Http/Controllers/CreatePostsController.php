@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CreatePostsController extends Controller
 {
@@ -15,6 +16,8 @@ class CreatePostsController extends Controller
      *
      */
     public function show() {
+        Log::debug("Entering CreatePostsController.show");
+
         return view('posts.createNew');
     }
 
@@ -26,6 +29,8 @@ class CreatePostsController extends Controller
      *
      */
     public function create() {
+        Log::debug("Entering CreatePostsController.create");
+
         request()->validate([
             'post_title' => ['required'],
             'post_body' => ['required']
